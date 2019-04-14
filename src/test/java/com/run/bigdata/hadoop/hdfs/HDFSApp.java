@@ -19,7 +19,7 @@ import java.net.URI;
  */
 public class HDFSApp {
 
-    public static final String HDFS_URI = "hdfs://hadoop000:8020";
+    public static final String HDFS_URI = "hdfs://master:9000";
     Configuration configuration = null;
     FileSystem fileSystem =null;
 
@@ -29,7 +29,7 @@ public class HDFSApp {
         configuration = new Configuration();
         configuration.set("dfs.replication","1");
 
-        fileSystem = FileSystem.get(new URI(HDFS_URI),configuration,"root");
+        fileSystem = FileSystem.get(new URI(HDFS_URI),configuration,"hadoop");
     }
 
     @After
@@ -41,7 +41,7 @@ public class HDFSApp {
 
     @Test
     public void testMkdir() throws Exception{
-        Path path = new Path("/hdfsapi/test");
+        Path path = new Path("/hdfsapi/test2");
         boolean result = fileSystem.mkdirs(path);
 
         System.out.println(result);

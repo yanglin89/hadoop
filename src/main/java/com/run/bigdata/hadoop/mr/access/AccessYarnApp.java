@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 /**
  * access 流量统计driver
  */
-public class AccessLocalApp {
+public class AccessYarnApp {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException {
 
@@ -24,7 +24,7 @@ public class AccessLocalApp {
 
         Job job = Job.getInstance(configuration);
 
-        job.setJarByClass(AccessLocalApp.class);
+        job.setJarByClass(AccessYarnApp.class);
         job.setMapperClass(AccessMapper.class);
         job.setReducerClass(AccessReducer.class);
 
@@ -42,15 +42,15 @@ public class AccessLocalApp {
         job.setOutputValueClass(Access.class);
 
         //如果输出路径已经存在，要先删除
-        /*FileSystem fs = FileSystem.get(new URI("hdfs://160.124.156.102:8020"),configuration,"root");
-        Path outPath = new Path("output/access");
+        FileSystem fs = FileSystem.get(new URI("hdfs://master:9000"),configuration,"hadoop");
+        Path outPath = new Path(args[1]);
         if (fs.exists(outPath)){
             fs.delete(outPath,true);
-        }*/
+        }
 
         //设置job输入输出文件路径
-        FileInputFormat.setInputPaths(job,new Path("input/access/access.log"));
-        FileOutputFormat.setOutputPath(job,new Path("output/access"));
+        FileInputFormat.setInputPaths(job,new Path(args[0]));
+        FileOutputFormat.setOutputPath(job,new Path(args[1]));
 
         boolean result = job.waitForCompletion(true);
 
